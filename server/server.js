@@ -1,6 +1,6 @@
 const io = require("socket.io")(3000,{
     cors: {
-        origin:"http://localhost:3001",
+        origin:"https://link-gules-six.vercel.app",
         methods: ["GET", "POST"]
     }})
 
