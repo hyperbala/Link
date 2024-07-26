@@ -48,7 +48,7 @@ export default function Home() {
             <div className="flex gap-6">
               <div className="flex text-center items-center gap-2 p-2 border-[1px] w-3/5 lg:w-5/6 border-slate-500 rounded-[4px]">
                 <FaKeyboard />
-                <input placeholder='Enter room ID' alue={roomId} onChange={(e) => setRoomId(e?.target?.value)} className="text-balance w-3/4" />
+                <input placeholder='Enter room ID' alue={roomId} onChange={(e) => setRoomId(e?.target?.value)} className="text-balance w-3/4 outline-none" />
               </div>
               <button onClick={joinRoom} className="text-gray-400 w-5">Join</button>
             </div>

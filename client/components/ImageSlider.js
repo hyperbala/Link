@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
-import Image from 'next/image';
+import ImageItem from './ImageItem';
 const ImageSlider = ({ images }) => {
   return (
     <div className="flex mt-16 sm:mt-0 w-1 max-w-1">
@@ -9,26 +9,11 @@ const ImageSlider = ({ images }) => {
         showThumbs={false}
         autoPlay
         infiniteLoop
-        // interval={2000}
         showArrows={false}
         showStatus={false}
       >
         {images.map((image) => (
-          <div className='flex-col'>
-            <div className='w-4/6 mb-6 mx-auto'>
-
-              <Image
-                src={image.url}
-                alt={''}
-                width={4}
-                height={1}
-                className=""
-                key={image.captions}
-              />
-            </div>
-            <p className='text-gray-800 text-xl mt-10'>{image.captionHeading}</p>
-            <p className='text-gray-500 text-sm mb-6 py-2'>{image.caption}</p>
-          </div>
+          <ImageItem image={image} key={image.url}/>
         ))}
       </Carousel>
     </div>

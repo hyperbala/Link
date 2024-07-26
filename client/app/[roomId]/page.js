@@ -1,22 +1,22 @@
 "use client"
-import React, { useEffect, useState } from 'react'
-import Player from '@/components/Player'
-import Bottom from '@/components/Bottom'
-import usePeer from '@/hooks/peer'
+
+import React, { useEffect, useState } from 'react';
+import Player from '@/components/Player';
+import Bottom from '@/components/Bottom';
+import usePeer from '@/hooks/peer';
 import { useSocket } from "@/context/socket";
-import { useSearchParams, usePathname } from "next/navigation"
+import { useSearchParams, usePathname } from "next/navigation";
 import useMediaStream from '@/hooks/mediaStream';
 import usePlayer from '@/hooks/player';
 import { cloneDeep } from "lodash";
 
-
-const page = () => {
+const Page = () => {
   const socket = useSocket();
-  const searchParams = useSearchParams()
-  const { peer, myId } = usePeer()
-  const pathname = usePathname().toString()
-  const roomId = pathname.slice(1)
-  const { stream } = useMediaStream()
+  const searchParams = useSearchParams();
+  const { peer, myId } = usePeer();
+  const pathname = usePathname().toString();
+  const roomId = pathname.slice(1);
+  const { stream } = useMediaStream();
   const {
     players,
     setPlayers,
@@ -27,7 +27,7 @@ const page = () => {
     leaveRoom
   } = usePlayer(myId, roomId, peer);
 
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     if (!socket || !peer || !stream) return;
@@ -50,7 +50,7 @@ const page = () => {
         setUsers((prev) => ({
           ...prev,
           [newUser]: call
-        }))
+        }));
       });
     };
     socket.on("user-connected", handleUserConnected);
@@ -59,7 +59,6 @@ const page = () => {
       socket.off("user-connected", handleUserConnected);
     };
   }, [peer, setPlayers, socket, stream]);
-
 
   useEffect(() => {
     if (!socket) return;
@@ -83,11 +82,11 @@ const page = () => {
 
     const handleUserLeave = (userId) => {
       console.log(`user ${userId} is leaving the room`);
-      users[userId]?.close()
+      users[userId]?.close();
       const playersCopy = cloneDeep(players);
       delete playersCopy[userId];
       setPlayers(playersCopy);
-    }
+    };
     socket.on("user-toggle-audio", handleToggleAudio);
     socket.on("user-toggle-video", handleToggleVideo);
     socket.on("user-leave", handleUserLeave);
@@ -118,7 +117,7 @@ const page = () => {
         setUsers((prev) => ({
           ...prev,
           [callerId]: call
-        }))
+        }));
       });
     });
   }, [peer, setPlayers, stream]);
@@ -139,7 +138,7 @@ const page = () => {
   return (
     <div className='bg-gray-900 h-screen'>
       {playerHighlighted && Object.keys(nonHighlightedPlayers).length && (
-        <div className='absolute md:bottom-14 bottom-10 right-1/3 md:right-40  z-10 md:p-2 md:w-1/5 md:h-auto w-1/3 h-2/5'>
+        <div className='absolute md:bottom-14 bottom-10 right-1/3 md:right-40 z-10 md:p-2 md:w-1/5 md:h-auto w-1/3 h-2/5'>
           <Player
             key={playerHighlighted.url}
             url={playerHighlighted.url}
@@ -149,11 +148,9 @@ const page = () => {
           />
         </div>
       )}
-      {console.log(
-      )}
       {playerHighlighted && !Object.keys(nonHighlightedPlayers).length && (
-        <div className=' flex justify-center h-screen '>
-          <div className='relative md:w-full md:h-full h-screen p-5 pb-16 '>
+        <div className='flex justify-center h-screen'>
+          <div className='relative md:w-full md:h-full h-screen p-5 pb-16'>
             <Player
               key={playerHighlighted.url}
               url={playerHighlighted.url}
@@ -163,30 +160,25 @@ const page = () => {
             />
           </div>
         </div>
-
       )}
       <div>
         {Object.keys(nonHighlightedPlayers).map((playerId) => {
           const { url, muted, playing } = nonHighlightedPlayers[playerId];
           return (
-
-            <div className=' flex justify-center md:h-screen h-max z-0'>
-              <div className='relative md:w-full md:h-full pt-10 h-full p-5 pb-16 '>
+            <div className='flex justify-center md:h-screen h-max z-0' key={playerId}>
+              <div className='relative md:w-full md:h-full pt-10 h-full p-5 pb-16'>
                 <Player
-                  key={playerId}
                   url={url}
                   muted={muted}
                   playing={playing}
                   isActive={false}
                 />
               </div>
-
             </div>
           );
         })}
       </div>
-      <div className='absolute bottom-1 flex  w-full '>
-
+      <div className='absolute bottom-2 flex w-full'>
         <Bottom
           muted={playerHighlighted?.muted}
           playing={playerHighlighted?.playing}
@@ -196,7 +188,7 @@ const page = () => {
         />
       </div>
     </div>
-  )
+  );
 }
 
-export default page
+export default Page;
